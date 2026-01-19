@@ -35,6 +35,18 @@ export function mettreAJourPagination(nbTotalElements: number, pageActuelle: num
     }
 }
 
-export function creerCarte(nom: string, image: string) {
-    return `<li class="pokemon-card"><img src="${image}" alt=""                         /><span class="pokemon-name">${nom}</span></li>`;
+export function creerCarte(nom: string, image: string, id: number, stats: any[], cri: string) {
+    const statsHtml = stats.map(s => `<li>${s.stat.name}: ${s.base_stat}</li>`).join('');
+
+    return `
+      <li class="pokemon-card">
+        <span class="pokemon-id">#${id}</span>
+        <img src="${image}" alt="" />
+        <span class="pokemon-name">${nom}</span>
+        <button class="btn-cri" onclick="new Audio('${cri}').play()">Sound</button>
+        <ul class="pokemon-stats">
+          ${statsHtml}
+        </ul>
+      </li>
+    `;
 }

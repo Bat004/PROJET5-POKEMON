@@ -48,7 +48,7 @@ async function charger() {
 
                 const info = await chercherDetails(p.url)
                 const image = info.sprites.other['official-artwork'].front_default
-                liste.innerHTML += creerCarte(info.name, image)
+                liste.innerHTML += creerCarte(info.name, image, info.id, info.stats, info.cries.latest)
             }
         }
     } catch (e) {
