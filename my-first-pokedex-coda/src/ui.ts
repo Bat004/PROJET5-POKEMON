@@ -1,3 +1,5 @@
+import './carte.ts'
+
 export function genererSquelette(zone: HTMLElement) {
     zone.innerHTML = `
       <div class="header-container">
@@ -13,6 +15,7 @@ export function genererSquelette(zone: HTMLElement) {
         </div>
       </div>
       <ul id="pokemon-list"></ul>
+      <div id="pokemon-pop-up"></div> 
     `;
 }
 
@@ -35,18 +38,13 @@ export function mettreAJourPagination(nbTotalElements: number, pageActuelle: num
     }
 }
 
-export function creerCarte(nom: string, image: string, id: number, stats: any[], cri: string) {
-    const statsHtml = stats.map(s => `<li>${s.stat.name}: ${s.base_stat}</li>`).join('');
-
+export function creerCarte(nom: string, image: string, url: string, cri: string) {
     return `
       <li class="pokemon-card">
-        <span class="pokemon-id">#${id}</span>
-        <img src="${image}" alt="" />
-        <span class="pokemon-name">${nom}</span>
-        <button class="btn-cri" onclick="new Audio('${cri}').play()">Sound</button>
-        <ul class="pokemon-stats">
-          ${statsHtml}
-        </ul>
+        <img src="${image}" alt="${nom}" />
+        <span class="pokemon-name" onclick="afficherPopup('${url}', '${cri}')">
+          ${nom}
+        </span>
       </li>
     `;
 }
