@@ -149,20 +149,108 @@ h1 {
   color: white;
 }
 
+/* Conteneur principal du popup (le fond noir transparent) */
+#pokemon-pop-up {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px); /* Floute l'arrière-plan pour un effet premium */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* La carte elle-même */
 .popup-content {
-  background: white;
-  color: black;
-  padding: 20px;
-  border-radius: 15px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    padding: 2rem;
+    border-radius: 30px;
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    border: 4px solid #333;
+    overflow: hidden;
 }
 
-.pokemon-id{
-  color : black
+/* Effet de reflet sur la carte */
+.popup-content::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: rotate(45deg);
+    pointer-events: none;
 }
 
+.popup-content h2 {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.popup-content img {
+    width: 200px;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+    transition: transform 0.3s ease;
+}
+
+.popup-content img:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Style des stats sous forme de badges */
+.popup-content ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.popup-content li {
+    background: #333;
+    color: white;
+    padding: 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Bouton CRI original */
+.btn-cri {
+    background: #ffcb05;
+    border: 3px solid #3c5aa6;
+    color: #3c5aa6;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 15px;
+}
+
+.btn-cri:hover {
+    background: #3c5aa6;
+    color: white;
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
 
 /* Positionnement du bouton burger en haut à gauche */
 .burger-menu-container {
