@@ -1,4 +1,5 @@
 import './style.css'
+import './filtre.ts'
 import { genererSquelette } from './ui.ts'
 import { initialiserRecherche } from './search.ts'
 import { initialiserPagination } from './pagination.ts'
