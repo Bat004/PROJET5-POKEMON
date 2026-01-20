@@ -1,22 +1,10 @@
 import './style.css'
-import './filtre.ts'
-import { genererSquelette } from './ui.ts'
-import { initialiserRecherche } from './search.ts'
 import { initialiserPagination } from './pagination.ts'
 import { chargerLaListe } from './listepkm.ts'
 
-const app = document.querySelector<HTMLDivElement>('#app')
+initialiserPagination(() => {
+    chargerLaListe();
+});
 
-if (app) {
-    genererSquelette(app)
-    
-    initialiserRecherche(() => chargerLaListe())
-    
-    initialiserPagination(() => {
-        const champ = document.querySelector('#pokemon-search') as HTMLInputElement
-        if (champ) champ.value = ""
-        chargerLaListe()
-    })
+chargerLaListe();
 
-    chargerLaListe()
-}

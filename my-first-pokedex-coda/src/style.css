@@ -1,309 +1,315 @@
+:root {
+    --pkm-red: #ff4757;
+    --pkm-red-dark: #cc313f;
+    --pkm-red-light: #ff6b81;
+    --pkm-yellow: #ffcb05;
+    --pkm-blue-sky: #70a1ff;
+    --pkm-screen-inner: #f1f2f6;
+    --pkm-border: #2f3542;
+}
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    box-sizing: border-box; margin: 0; padding: 0;
+    font-family: 'Press Start 2P', cursive;
+    image-rendering: pixelated;
 }
 
-body {
-  font-family: 'Press Start 2P', cursive;
-  background-image: url('../Image/img3.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 900px;
-  margin-bottom: 30px;
-  background-color: rgba(42, 117, 187, 0.95);
-  padding: 15px 20px;
-  border: 4px solid #1b2233;
-  border-radius: 8px;
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-h1 {
-  color: #ffffff;
-  font-size: 16px;
-  text-shadow: 2px 2px #000;
-}
-
-/* Pokéball & Recherche */
-#pokeball-img {
-  width: 35px;
-  cursor: pointer;
-  transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-#pokeball-img.opened { transform: rotate(180deg) scale(1.2); }
-
-#search-box { transition: 0.4s ease; overflow: hidden; }
-.search-hidden { width: 0; opacity: 0; }
-.search-visible { width: 200px; opacity: 1; margin: 0 10px; }
-
-#pokemon-search {
-  width: 100%;
-  padding: 6px;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 8px;
-  border: 2px solid #1b2233;
-}
-
-/* Pagination Header */
-.pagination-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.pagination-header button {
-  background: #ffffff;
-  border: 2px solid #000000;
-  cursor: pointer;
-  padding: 4px 8px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.page-display {
-  color: #ffffff;
-  font-size: 10px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-#page-select {
-  background: transparent;
-  border: none;
-  color: #ffffff;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 10px;
-  cursor: pointer;
-}
-
-#page-select option { background: #000000; color: white; }
-
-/* Liste & Cartes */
-#pokemon-list {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 20px;
-  width: 100%;
-  max-width: 900px;
-}
-
-.pokemon-card {
-  background: white;
-  border: 4px solid #1b2233;
-  border-radius: 15px;
-  padding: 15px;
-  text-align: center;
-  box-shadow: 4px 4px 0px #1b2233;
-  transition: 0.2s;
-}
-
-.pokemon-card:hover {
-  transform: translateY(-5px);
-  border-color: #2a75bb;
-}
-
-.pokemon-card img { width: 100px; height: 100px; }
-
-.pokemon-name {
-  display: block;
-  margin-top: 8px;
-  font-size: 9px;
-  text-transform: capitalize;
-}
-
-.loading-text { color: white; padding: 40px; font-size: 10px; }
-
-#pokemon-pop-up {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.85);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
-
-/* Conteneur principal du popup (le fond noir transparent) */
-#pokemon-pop-up {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px); /* Floute l'arrière-plan pour un effet premium */
-    display: none;
+body.pixel-art-bg {
+    background-color: var(--pkm-blue-sky);
+    background-image: radial-gradient(white 2px, transparent 2px), radial-gradient(white 4px, transparent 4px);
+    background-size: 100px 100px, 150px 150px;
+    animation: cloudsMove 60s linear infinite;
+    height: 100vh;
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-out;
-}
-
-/* La carte elle-même */
-.popup-content {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-    padding: 2rem;
-    border-radius: 30px;
-    position: relative;
-    max-width: 400px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    border: 4px solid #333;
     overflow: hidden;
 }
 
-/* Effet de reflet sur la carte */
-.popup-content::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-    transform: rotate(45deg);
-    pointer-events: none;
+@keyframes cloudsMove {
+    from { background-position: 0 0, 0 0; }
+    to { background-position: 1000px 500px, 500px 1000px; }
 }
 
-.popup-content h2 {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-    color: #333;
+.pokedex-console {
+    background-color: var(--pkm-red);
+    width: 95vw; height: 85vh;
+    max-width: 1300px;
+    border: 10px solid var(--pkm-border);
+    display: flex;
+    padding: 20px;
+    border-radius: 60px 20px 20px 60px;
+    box-shadow: 20px 20px 0 rgba(0,0,0,0.1), inset -10px -10px 0 var(--pkm-red-dark), inset 10px 10px 0 var(--pkm-red-light);
 }
 
-.popup-content img {
-    width: 200px;
-    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
-    transition: transform 0.3s ease;
-}
-
-.popup-content img:hover {
-    transform: scale(1.1) rotate(5deg);
-}
-
-/* Style des stats sous forme de badges */
-.popup-content ul {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.popup-content li {
-    background: #333;
-    color: white;
-    padding: 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-
-/* Bouton CRI original */
-.btn-cri {
-    background: #ffcb05;
-    border: 3px solid #3c5aa6;
-    color: #3c5aa6;
-    padding: 10px 20px;
-    border-radius: 50px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 15px;
-}
-
-.btn-cri:hover {
-    background: #3c5aa6;
-    color: white;
-    transform: translateY(-2px);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* Positionnement du bouton burger en haut à gauche */
-.burger-menu-container {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000; /* Pour rester au-dessus du reste du contenu */
-}
-
-.burger-icon {
-    width: 40px;
-    height: 30px;
-    cursor: pointer;
+.pixel-controls-sidebar {
+    width: 180px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
+    padding: 30px 0;
+    border-right: 6px solid var(--pkm-border);
 }
 
-.burger-icon span {
-    display: block;
-    height: 4px;
-    width: 100%;
-    background-color: #333;
-    border-radius: 2px;
-    transition: 0.3s ease;
+.pixel-dpad {
+    width: 90px; height: 90px;
+    clip-path: polygon(35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%);
 }
 
-/* Le panneau latéral (Menu Filtre) */
-.filter-sidebar {
-    position: fixed;
-    top: 0;
-    left: -300px; /* Caché par défaut à gauche */
-    width: 300px;
+/* D-PAD COMME SUR TON IMAGE MAIS PLUS BEAU */
+.pixel-dpad-visual {
+    width: 110px; /* Un peu plus grand pour les détails */
+    height: 110px;
+    background-color: var(--pkm-border);
+    position: relative;
+    clip-path: polygon(
+        35% 0%, 65% 0%, 65% 35%, 100% 35%, 100% 65%,
+        65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%
+    );
+    /* Relief extérieur dur */
+    box-shadow: 
+        0 8px 0 rgba(0,0,0,0.4),
+        0 15px 20px rgba(0,0,0,0.2);
+}
+
+/* EFFET DE RELIEF INTERNE (Les lignes de lumière sur la croix) */
+.pixel-dpad-visual::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: transparent;
+    /* On simule les bords biseautés avec des ombres internes */
+    box-shadow: 
+        inset 0 6px 0 rgba(255,255,255,0.15), /* Lumière en haut */
+        inset 6px 0 0 rgba(255,255,255,0.1),  /* Lumière à gauche */
+        inset 0 -6px 0 rgba(0,0,0,0.4),       /* Ombre en bas */
+        inset -6px 0 0 rgba(0,0,0,0.4);      /* Ombre à droite */
+    pointer-events: none;
+}
+
+/* SYMBOLES DE FLÈCHES GRAVÉS */
+.pixel-dpad-visual::after {
+    content: "▲"; /* On peut en mettre plusieurs ou un point central */
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    color: rgba(255,255,255,0.05); /* Très subtil, comme gravé */
+    text-shadow: 0 45px 0 rgba(255,255,255,0.05), 0 -45px 0 rgba(255,255,255,0.05), 45px 0 0 rgba(255,255,255,0.05), -45px 0 0 rgba(255,255,255,0.05);
+}
+
+/* LES ZONES DE CLIC (HITBOXES) - On les garde telles quelles */
+.dpad-hitbox {
+    position: absolute;
+    background: transparent; /* Invisibles mais cliquables */
+    border: none;
+    cursor: pointer;
+}
+
+/* Zone gauche (Bouton précédent) */
+#btn-precedent {
+    left: 0; top: 35%;
+    width: 35%; height: 30%;
+}
+
+/* Zone droite (Bouton suivant) */
+#btn-suivant {
+    right: 0; top: 35%;
+    width: 35%; height: 30%;
+}
+
+/* On peut ajouter un petit effet visuel au clic */
+.dpad-hitbox:active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Décoration optionnelle : le petit rond au centre du D-pad */
+.pixel-dpad-visual::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px; height: 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+}
+
+/* GRILLE DES BOUTONS D'ACTION */
+.action-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.action-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 4px solid var(--pkm-border);
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.3);
+    transition: all 0.05s;
+}
+
+/* Couleurs façon Nintendo / Pokémon */
+.btn-x { background-color: #3498db; } /* Bleu */
+.btn-y { background-color: #f1c40f; } /* Jaune */
+.btn-a { background-color: #e74c3c; } /* Rouge */
+.btn-b { background-color: #2ecc71; } /* Vert */
+
+.action-btn::after {
+    content: attr(data-label);
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: rgba(0,0,0,0.3);
+    font-weight: bold;
+}
+
+.action-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+}
+
+/* On ajuste la sidebar pour que tout rentre sans déborder */
+.pixel-controls-sidebar {
+    padding: 20px 0;
+    justify-content: space-between;
+}
+.pixel-buttons-group { display: flex; flex-direction: column; gap: 20px; }
+
+.pixel-btn {
+    width: 70px; height: 70px;
+    border: 6px solid var(--pkm-border);
+    position: relative; cursor: pointer;
+    box-shadow: 6px 6px 0 var(--pkm-border);
+}
+.btn-y { background: var(--pkm-yellow); }
+.btn-b { background: #1e90ff; }
+.pixel-btn::after {
+    content: attr(data-label);
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-size: 20px; color: var(--pkm-border);
+}
+
+.pixel-screen-bezel {
+    flex: 1;
+    background: var(--pkm-border);
+    margin: 10px 10px 10px 25px;
+    padding: 15px;
+    display: flex;
+}
+
+.pixel-screen-display {
+    background: var(--pkm-screen-inner);
+    flex: 1; padding: 20px;
+    border: 4px solid var(--pkm-border);
+    overflow: hidden;
+}
+
+.grid-10-pixels {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px; /* On augmente un peu l'espace entre les cases */
     height: 100%;
-    background-color: #fff;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-    transition: 0.3s ease;
-    padding: 60px 20px 20px 20px;
-    z-index: 999;
+    list-style: none;
 }
 
-/* Classe ajoutée par TypeScript pour ouvrir le menu */
-.filter-sidebar.active {
-    left: 0;
+/* --- STYLE DU COMPOSANT POKEMON-CARD --- */
+.card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 4px solid var(--pkm-border);
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.1s;
+    image-rendering: pixelated;
+    gap: 5px;
+    height: 100%;
 }
 
-/* Animation optionnelle du burger quand il est ouvert */
-.burger-icon.open span:nth-child(1) {
-    transform: translateY(13px) rotate(45deg);
+.card-wrapper:hover {
+    background: var(--pkm-yellow);
+    transform: translate(-3px, -8px);
+    box-shadow: 7px 12px 0 var(--pkm-border);
 }
-.burger-icon.open span:nth-child(2) {
-    opacity: 0;
+
+.card-wrapper img {
+    height: 95px;
+    width: 95px;
+    object-fit: contain;
 }
-.burger-icon.open span:nth-child(3) {
-    transform: translateY(-13px) rotate(-45deg);
+
+.card-wrapper p {
+    font-size: 8px;
+    margin-top: 8px;
+    text-transform: uppercase;
+    color: var(--pkm-border);
+    text-align: center;
+}
+
+/* --- STYLE DU COMPOSANT POKEMON-DETAIL --- */
+.fiche-detaillee {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: var(--pkm-border);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.fiche-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--pkm-border);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.btn-retour {
+    background: var(--pkm-red);
+    color: white;
+    border: 3px solid var(--pkm-border);
+    padding: 5px 10px;
+    font-size: 8px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--pkm-border);
+}
+
+.fiche-corps {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.fiche-corps img {
+    height: 240px;
+    filter: drop-shadow(8px 8px 0 rgba(0,0,0,0.1));
+}
+
+.info-box ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.info-box li {
+    background: var(--pkm-border);
+    color: white;
+    padding: 5px;
+    font-size: 8px;
+    border: 1px solid #000;
 }

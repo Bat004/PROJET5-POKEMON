@@ -1,10 +1,10 @@
-export const POKEMONS_PAR_PAGE = 20;
+export const POKEMONS_PAR_PAGE = 10;
 let pageActuelle = 0;
 
 export function initialiserPagination(auChangementDePage: (nouvellePage: number) => void) {
     const btnAvant = document.querySelector('#btn-precedent');
     const btnApres = document.querySelector('#btn-suivant');
-    const menuPages = document.querySelector('#page-select') as HTMLSelectElement;
+    const menuPages = document.querySelector('#page-select') as HTMLSelectElement | null;
 
     btnApres?.addEventListener('click', () => {
         pageActuelle++;

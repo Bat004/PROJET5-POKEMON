@@ -1,55 +1,38 @@
-import { chercherListe, chercherDetails, chercherTousLesNoms } from './api.ts';
-import { filtrerLesPokemons } from './search.ts';
+import { chercherListe, chercherDetails } from './api.ts';
 import { obtenirPageActuelle } from './pagination.ts';
-import { mettreAJourPagination, creerCarte } from './ui.ts';
+import { creerCarte } from './ui.ts';
 
-let cacheTousLesPokemon: any[] = [];
-let idRequeteActuelle = 0;
+
+let dernierePage = 0;
 
 export async function chargerLaListe() {
     const liste = document.querySelector('#pokemon-list');
-    const champ = document.querySelector('#pokemon-search') as HTMLInputElement;
-    const paginationZone = document.querySelector('.pagination-header') as HTMLElement;
-
-    idRequeteActuelle++;
-    const monId = idRequeteActuelle;
+    if (!liste) return;
 
     try {
-        const texteRecherche = champ?.value.toLowerCase().trim();
-        let PokemonAAfficher = [];
+        const page = obtenirPageActuelle();
+        const directionClass = page > dernierePage ? 'slide-in-right' : 'slide-in-left';
+        dernierePage = page;
 
-        if (texteRecherche) {
-            if (paginationZone) paginationZone.style.display = 'none';
-            if (cacheTousLesPokemon.length === 0) {
-                cacheTousLesPokemon = await chercherTousLesNoms();
-            }
-            PokemonAAfficher = filtrerLesPokemons(cacheTousLesPokemon, texteRecherche).slice(0, 20);
-        } else {
-            if (paginationZone) paginationZone.style.display = 'flex';
-            const page = obtenirPageActuelle();
-            const donnees = await chercherListe(page);
-            mettreAJourPagination(donnees.count, page);
-            PokemonAAfficher = donnees.results;
-        }
+        liste.innerHTML = "";
+        liste.classList.remove('slide-in-right', 'slide-in-left');
 
-        if (liste) {
-            if (monId !== idRequeteActuelle) return;
+        const donnees = await chercherListe(page);
+        const PokemonAAfficher = donnees.results.slice(0, 10);
 
-            liste.innerHTML = "";
-            if (PokemonAAfficher.length === 0 && texteRecherche) {
-                liste.innerHTML = '<p class="loading-text">aucun Pokémon trouvé.</p>';
-                return;
-            }
+        const detailsPromises = PokemonAAfficher.map((p: any) => chercherDetails(p.url));
+        const infos = await Promise.all(detailsPromises);
 
-            for (const p of PokemonAAfficher) {
-                if (monId !== idRequeteActuelle) return;
+        infos.forEach(info => {
+            const image = info.sprites.front_default
+            const urlPokemon = `https://pokeapi.co/api/v2/pokemon/${info.id}/`;
+            liste.innerHTML += creerCarte(info.name, image, urlPokemon, info.cries.latest);
+        });
 
-                const info = await chercherDetails(p.url);
-                const image = info.sprites.other['official-artwork'].front_default;
-                liste.innerHTML += creerCarte(info.name, image, p.url, info.cries.latest);
-            }
-        }
+        void (liste as HTMLElement).offsetWidth;
+        liste.classList.add(directionClass);
+
     } catch (e) {
-        console.error("Erreur lors du chargement :", e);
+        console.error("Erreur lors du chargement des Pokémon :", e);
     }
 }

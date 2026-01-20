@@ -1,13 +1,50 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <title>Pokédex</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <title>Pokédex</title>
+</head>
+<body class="pixel-art-bg">
+<div class="pokedex-console">
+  <!-- TOUS LES CONTRÔLES À GAUCHE -->
+  <div class="pixel-controls-sidebar">
+        <!-- LA CROIX VISUELLE UNIQUE -->
+        <div class="pixel-dpad-visual">
+            <button id="btn-precedent" class="dpad-hitbox left" title="Gauche"></button>
+            <button id="btn-suivant" class="dpad-hitbox right" title="Droite"></button>
+            <div class="dpad-hitbox up"></div>
+            <div class="dpad-hitbox down"></div>
+        </div>
+
+        <!-- NOUVEAUX BOUTONS D'ACTION (Grille 2x2) -->
+        <div class="action-buttons-grid">
+            <button class="action-btn btn-x" data-label="X"></button>
+            <button class="action-btn btn-y" data-label="Y"></button>
+            <button class="action-btn btn-a" data-label="A"></button>
+            <button class="action-btn btn-b" data-label="B"></button>
+        </div>
+
+        <div class="pixel-status-group">
+            <div class="led-green"></div>
+      <div class="pixel-speaker">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉCRAN À DROITE -->
+  <div class="pixel-screen-bezel">
+    <div class="pixel-screen-display">
+      <ul id="pokemon-list" class="grid-10-pixels">
+        <!-- Les Pokémon s'injectent ici -->
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="pokemon-pop-up"></div>
+<script type="module" src="/src/main.ts"></script>
+</body>
 </html>
