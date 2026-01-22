@@ -2,13 +2,20 @@ import { chercherListe, chercherDetails } from './api.ts';
 import { obtenirPageActuelle } from './pagination.ts';
 import { creerCarte } from './ui.ts';
 
+// Cache de la liste "brute" (name/url) de la page courante
+let listePageCourante: any[] = [];
 
 let dernierePage = 0;
+
+export function obtenirListePageCourante(): any[] {
+    return listePageCourante;
+}
 
 export async function chargerLaListe() {
     try {
         const page = obtenirPageActuelle();
         const donnees = await chercherListe(page);
+
         await chargerLaListeDepuisDonnees(donnees.results.slice(0, 10), page);
     } catch (e) {
         console.error("Erreur lors du chargement des Pokémon :", e);

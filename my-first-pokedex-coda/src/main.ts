@@ -2,6 +2,7 @@ import './style.css'
 import { initialiserPagination } from './pagination.ts'
 import { chargerLaListe } from './listepkm.ts'
 import { initialiserBoutonsAction } from './Elements.ts'
+import { initialiserRechercheVhsFiltreGlobal } from './search.ts'
 
 initialiserPagination(() => {
     chargerLaListe();
@@ -9,6 +10,7 @@ initialiserPagination(() => {
 
 chargerLaListe();
 
-// Initialisation des boutons d'action (Y, B)
 initialiserBoutonsAction();
 
+// VHS: filtre global parmi tous les Pokémon
+initialiserRechercheVhsFiltreGlobal();

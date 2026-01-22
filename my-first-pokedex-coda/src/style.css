@@ -68,7 +68,7 @@ body.pixel-art-bg {
         65% 65%, 65% 100%, 35% 100%, 35% 65%, 0% 65%, 0% 35%, 35% 35%
     );
     /* Relief extérieur dur */
-    box-shadow: 
+    box-shadow:
         0 8px 0 rgba(0,0,0,0.4),
         0 15px 20px rgba(0,0,0,0.2);
 }
@@ -80,7 +80,7 @@ body.pixel-art-bg {
     top: 0; left: 0; width: 100%; height: 100%;
     background: transparent;
     /* On simule les bords biseautés avec des ombres internes */
-    box-shadow: 
+    box-shadow:
         inset 0 6px 0 rgba(255,255,255,0.15), /* Lumière en haut */
         inset 6px 0 0 rgba(255,255,255,0.1),  /* Lumière à gauche */
         inset 0 -6px 0 rgba(0,0,0,0.4),       /* Ombre en bas */
@@ -350,7 +350,7 @@ body.pixel-art-bg {
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
-    box-shadow: 
+    box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.5),
         inset 0 4px 0 rgba(255, 255, 255, 0.2);
 }
@@ -500,20 +500,20 @@ body.pixel-art-bg {
         width: 95%;
         max-width: none;
     }
-    
+
     .modal-header h2 {
         font-size: 12px;
     }
-    
+
     .modal-body {
         font-size: 10px;
         padding: 20px;
     }
-    
+
     .modal-footer {
         flex-direction: column;
     }
-    
+
     .modal-action-btn {
         width: 100%;
     }
@@ -624,4 +624,153 @@ body.pixel-art-bg {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
+}
+
+
+/* ==================== MINI ÉCRAN VHS (RECHERCHE) ==================== */
+
+.vhs-mini-screen {
+  width: 150px;
+  padding: 10px 10px 12px;
+  border: 6px solid var(--pkm-border);
+  border-radius: 12px;
+  background: #0b1412;
+  box-shadow:
+    0 6px 0 rgba(0,0,0,0.35),
+    inset 0 0 0 2px rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 18px; /* espace AVANT la croix directionnelle */
+}
+
+.vhs-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.05) 0px,
+    rgba(255,255,255,0.05) 1px,
+    rgba(0,0,0,0) 3px,
+    rgba(0,0,0,0) 6px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.vhs-glow {
+  position: absolute;
+  inset: -20px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(0,255,170,0.20), rgba(0,0,0,0) 45%),
+    radial-gradient(circle at 70% 60%, rgba(255,0,120,0.10), rgba(0,0,0,0) 55%),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06), rgba(0,0,0,0) 60%);
+  filter: blur(2px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.vhs-ui {
+  position: relative;
+  z-index: 1;
+  color: #b6ffd9;
+  text-shadow:
+    -1px 0 rgba(255,0,90,0.35),
+    1px 0 rgba(0,180,255,0.35);
+  animation: vhsFlicker 2.8s infinite;
+}
+
+.vhs-title {
+  font-size: 9px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.vhs-input-row {
+  display: flex;
+  align-items: center;
+}
+
+.vhs-input {
+  width: 100%;
+  height: 28px;
+  padding: 6px 8px;
+  border: 3px solid rgba(182,255,217,0.6);
+  background: rgba(0,0,0,0.35);
+  color: #c7ffe4;
+  outline: none;
+  border-radius: 8px;
+  font-size: 8px;
+  text-transform: lowercase;
+}
+
+.vhs-input::placeholder {
+  color: rgba(182,255,217,0.65);
+}
+
+.vhs-input:focus {
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 2px rgba(0,255,170,0.15);
+}
+
+.vhs-btn {
+  height: 28px;
+  padding: 0 10px;
+  border: 3px solid rgba(182,255,217,0.6);
+  background: rgba(0,0,0,0.25);
+  color: #c7ffe4;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 8px;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+}
+
+.vhs-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.25);
+}
+
+.vhs-hint {
+  margin-top: 8px;
+  font-size: 7px;
+  opacity: 0.75;
+}
+
+/* Suggestions sous l'input VHS */
+.vhs-suggestions {
+  list-style: none;
+  margin-top: 8px;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  max-height: 92px; /* ~3-4 items */
+  overflow: auto;
+}
+
+.vhs-suggestions:empty {
+  display: none;
+}
+
+.vhs-suggestion-item {
+  border: 2px solid rgba(182,255,217,0.45);
+  background: rgba(0,0,0,0.25);
+  color: #c7ffe4;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.vhs-suggestion-item:hover {
+  border-color: rgba(255,255,255,0.7);
+}
+
+@keyframes vhsFlicker {
+  0%, 100% { opacity: 0.92; transform: translateY(0); }
+  40% { opacity: 0.85; transform: translateY(0.2px); }
+  41% { opacity: 0.70; transform: translateY(-0.3px); }
+  42% { opacity: 0.93; transform: translateY(0); }
+  80% { opacity: 0.88; }
 }

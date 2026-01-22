@@ -11,12 +11,6 @@ export async function chercherDetails(url: string) {
     return await reponse.json();
 }
 
-export async function chercherTousLesNoms() {
-    const reponse = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
-    const donnees = await reponse.json();
-    return donnees.results;
-}
-
 export async function chercherTypes() {
     const reponse = await fetch('https://pokeapi.co/api/v2/type');
     const donnees = await reponse.json();

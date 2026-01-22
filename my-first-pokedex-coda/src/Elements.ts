@@ -180,7 +180,7 @@ class SearchModal extends BaseModal {
         const executerRecherche = async () => {
             const id = input.value.trim();
             if (!id) return;
-            
+
             const errorMsg = document.getElementById('search-error');
             if (errorMsg) errorMsg.style.display = 'none';
 

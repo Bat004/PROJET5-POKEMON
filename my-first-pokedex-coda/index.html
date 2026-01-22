@@ -10,6 +10,27 @@
 <div class="pokedex-console">
   <!-- TOUS LES CONTRÔLES À GAUCHE -->
   <div class="pixel-controls-sidebar">
+
+        <!-- MINI ÉCRAN VHS (recherche) - AU DESSUS DU D-PAD -->
+        <div class="vhs-mini-screen" aria-label="Recherche VHS">
+          <div class="vhs-scanlines"></div>
+          <div class="vhs-glow"></div>
+
+          <div class="vhs-ui">
+            <div class="vhs-title">SEARCH</div>
+            <div class="vhs-input-row">
+              <input
+                id="vhs-search-input"
+                class="vhs-input"
+                type="text"
+                inputmode="search"
+                autocomplete="off"
+                placeholder="nom..."
+              />
+            </div>
+          </div>
+        </div>
+
         <!-- LA CROIX VISUELLE UNIQUE -->
         <div class="pixel-dpad-visual">
             <button id="btn-precedent" class="dpad-hitbox left" title="Gauche"></button>
