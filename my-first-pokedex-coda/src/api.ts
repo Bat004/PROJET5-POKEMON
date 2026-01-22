@@ -16,3 +16,15 @@ export async function chercherTousLesNoms() {
     const donnees = await reponse.json();
     return donnees.results;
 }
+
+export async function chercherTypes() {
+    const reponse = await fetch('https://pokeapi.co/api/v2/type');
+    const donnees = await reponse.json();
+    return donnees.results;
+}
+
+export async function chercherPokemonParType(typeUrl: string) {
+    const reponse = await fetch(typeUrl);
+    const donnees = await reponse.json();
+    return donnees.pokemon.map((p: any) => p.pokemon);
+}
