@@ -114,9 +114,9 @@ class TypeModal extends BaseModal {
             const traductions: { [key: string]: string } = {
                 normal: 'Normal', fighting: 'Combat', flying: 'Vol', poison: 'Poison',
                 ground: 'Sol', rock: 'Roche', bug: 'Insecte', ghost: 'Spectre',
-                steel: 'Acier', fire: 'Feu', water: 'Eau', grass: 'Plante',
-                electric: 'Électrik', psychic: 'Psy', ice: 'Glace', dragon: 'Dragon',
-                dark: 'Ténèbres', fairy: 'Fée'
+                steel: 'Acier', fire: 'Feu', water: 'Eu', grass: 'Plante',
+                electric: 'Electrik', psychic: 'Psy', ice: 'Glace', dragon: 'Dragon',
+                dark: 'Tenebres', fairy: 'Fee'
             };
 
             types.forEach((type: any) => {
@@ -180,7 +180,7 @@ class SearchModal extends BaseModal {
         const executerRecherche = async () => {
             const id = input.value.trim();
             if (!id) return;
-
+            
             const errorMsg = document.getElementById('search-error');
             if (errorMsg) errorMsg.style.display = 'none';
 
@@ -196,7 +196,7 @@ class SearchModal extends BaseModal {
                 input.value = '';
             } catch (error) {
                 if (errorMsg) {
-                    errorMsg.textContent = "Pokémon introuvable. Vérifiez l'ID.";
+                    errorMsg.textContent = "Pokemon introuvable. Vérifiez l'ID.";
                     errorMsg.style.display = 'block';
                 }
             }
