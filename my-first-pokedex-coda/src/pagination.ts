@@ -4,7 +4,7 @@ let pageActuelle = 0;
 export function initialiserPagination(auChangementDePage: (nouvellePage: number) => void) {
     const btnAvant = document.querySelector('#btn-precedent');
     const btnApres = document.querySelector('#btn-suivant');
-    const menuPages = document.querySelector('#page-select') as HTMLSelectElement | null;
+    const menuPages = document.querySelector('#page-select') as HTMLSelectElement;
 
     btnApres?.addEventListener('click', () => {
         pageActuelle++;

@@ -1,4 +1,4 @@
-export class PokemonDetail extends HTMLElement {
+export class PokemonDetails extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
@@ -46,6 +46,6 @@ export class PokemonDetail extends HTMLElement {
     }
 }
 
-if (!customElements.get('pokemon-detail')) {
-    customElements.define('pokemon-detail', PokemonDetail);
+if (!customElements.get('pokemon-details')) {
+    customElements.define('pokemon-details', PokemonDetails);
 }

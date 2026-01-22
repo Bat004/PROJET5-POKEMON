@@ -11,13 +11,13 @@ export async function afficherLaFiche(url: string, cri: string) {
         const imageArt = details.sprites.front_default;
 
         ecran.innerHTML = `
-            <pokemon-detail 
+            <pokemon-details
                 name="${details.name}" 
                 image="${imageArt}"
                 id-pkm="${details.id}"
                 cri="${cri}"
                 stats='${JSON.stringify(details.stats)}'>
-            </pokemon-detail>
+            </pokemon-details>
         `;
     }
 }
