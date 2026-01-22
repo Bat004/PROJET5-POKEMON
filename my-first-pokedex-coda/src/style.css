@@ -2,7 +2,7 @@
     --pkm-red: #ff4757;
     --pkm-red-dark: #cc313f;
     --pkm-red-light: #ff6b81;
-    --pkm-yellow: #ff80a0;
+    --pkm-yellow: #ffcb05;
     --pkm-blue-sky: #70a1ff;
     --pkm-screen-inner: #f1f2f6;
     --pkm-border: #2f3542;
@@ -640,7 +640,6 @@ body.pixel-art-bg {
     inset 0 0 0 2px rgba(255,255,255,0.06);
   position: relative;
   overflow: hidden;
-  margin-bottom: 18px; /* espace AVANT la croix directionnelle */
 }
 
 .vhs-scanlines {
@@ -689,11 +688,13 @@ body.pixel-art-bg {
 
 .vhs-input-row {
   display: flex;
+  gap: 6px;
   align-items: center;
 }
 
 .vhs-input {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   height: 28px;
   padding: 6px 8px;
   border: 3px solid rgba(182,255,217,0.6);
@@ -735,36 +736,6 @@ body.pixel-art-bg {
   margin-top: 8px;
   font-size: 7px;
   opacity: 0.75;
-}
-
-/* Suggestions sous l'input VHS */
-.vhs-suggestions {
-  list-style: none;
-  margin-top: 8px;
-  padding: 0;
-  display: grid;
-  gap: 6px;
-  max-height: 92px; /* ~3-4 items */
-  overflow: auto;
-}
-
-.vhs-suggestions:empty {
-  display: none;
-}
-
-.vhs-suggestion-item {
-  border: 2px solid rgba(182,255,217,0.45);
-  background: rgba(0,0,0,0.25);
-  color: #c7ffe4;
-  border-radius: 8px;
-  padding: 6px 8px;
-  font-size: 8px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.vhs-suggestion-item:hover {
-  border-color: rgba(255,255,255,0.7);
 }
 
 @keyframes vhsFlicker {
