@@ -16,7 +16,7 @@ export function filtrerLesPokemons(liste: any[], texte: string) {
         });
 }
 
-let tousLesPokemons: { name: string; url: string }[] | null = null;
+let tousLesPokemons: { name: string; url: string }[];
 
 async function chargerTousLesPokemons(): Promise<{ name: string; url: string }[]> {
     if (tousLesPokemons) return tousLesPokemons;
