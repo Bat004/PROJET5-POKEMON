@@ -157,8 +157,8 @@ body.pixel-art-bg {
 /* Couleurs façon Nintendo / Pokémon */
 .btn-x { background-color: #3498db; } /* Bleu */
 .btn-y { background-color: #f1c40f; } /* Jaune */
-.btn-a { background-color: #e74c3c; } /* Rouge */
-.btn-b { background-color: #2ecc71; } /* Vert */
+.btn-a { background-color: #a905c8; } /* Rouge */
+.btn-b { background-color: #176739; } /* Vert */
 
 .action-btn::after {
     content: attr(data-label);
@@ -189,7 +189,7 @@ body.pixel-art-bg {
     box-shadow: 6px 6px 0 var(--pkm-border);
 }
 .btn-y { background: var(--pkm-yellow); }
-.btn-b { background: #1e90ff; }
+.btn-b { background: #28ac08; }
 .pixel-btn::after {
     content: attr(data-label);
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
