@@ -12,6 +12,7 @@ export class PokemonDetails extends HTMLElement {
         const name = this.getAttribute('name') || '';
         const image = this.getAttribute('image') || '';
         const id = this.getAttribute('id-pkm') || '';
+        const type = this.getAttribute('type') || '';
         const statsStr = this.getAttribute('stats') || '[]';
         let stats = [];
         
@@ -36,6 +37,7 @@ export class PokemonDetails extends HTMLElement {
                     <img src="${image}" alt="${name}" />
                     <div class="info-box">
                         <p>ID: #${id}</p>
+                        <p>Type: ${type}</p>
                         <button class="btn-cri" onclick="new Audio('${cri}').play()">CRI</button>
                         <ul>${statsHtml}</ul>
                     </div>

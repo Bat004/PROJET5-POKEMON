@@ -1,6 +1,6 @@
 export class PokemonCard extends HTMLElement {
     static get observedAttributes() {
-        return ['name', 'image', 'url', 'cri'];
+        return ['name', 'image', 'url', 'cri', 'type'];
     }
 
     constructor() {
