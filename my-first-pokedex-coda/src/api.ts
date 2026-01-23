@@ -80,3 +80,18 @@ export async function chercherPokemonParType(typeUrl: string) {
         return [];
     }
 }
+
+export async function chercherGenerations() {
+    const reponse = await fetch('https://pokeapi.co/api/v2/generation');
+    const donnees = await reponse.json();
+    return donnees.results;
+}
+
+export async function chercherPokemonParGeneration(genUrl: string) {
+    const reponse = await fetch(genUrl);
+    const donnees = await reponse.json();
+    return donnees.pokemon_species.map((p: any) => ({
+        name: p.name,
+        url: p.url.replace('pokemon-species', 'pokemon')
+    }));
+}

@@ -2,7 +2,7 @@
  * Elements.ts
  * Gestion des éléments interactifs et des modales (Filtrage et Recherche)
  */
-import { chercherTypes, chercherPokemonParType, chercherDetails } from './api.ts';
+import { chercherTypes, chercherPokemonParType, chercherDetails, chercherPokemonParGeneration, chercherGenerations } from './api.ts';
 import { chargerLaListeDepuisDonnees, chargerLaListe } from './listepkm.ts';
 
 /**
@@ -209,9 +209,91 @@ class SearchModal extends BaseModal {
     }
 }
 
+/**
+ * Modale pour le filtrage par Génération (Bouton A)
+ */
+class GenerationModal extends BaseModal {
+    private gensCharge: boolean = false;
+
+    constructor() {
+        super('generations');
+        this.initContent();
+    }
+
+    protected initContent(): void {
+        if (!this.modal) return;
+        this.modal.innerHTML = `
+            <div class="modal-header">
+                <h2>Filtrer par Génération</h2>
+                <button class="modal-close-btn">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="gens-container" class="gens-grid">
+                    <p>Chargement des générations...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-action-btn secondary" id="modal-reset-gens">Réinitialiser</button>
+                <button class="modal-action-btn" id="modal-close-gens">Fermer</button>
+            </div>
+        `;
+
+        this.modal.querySelector('.modal-close-btn')?.addEventListener('click', () => this.close());
+        this.modal.querySelector('#modal-close-gens')?.addEventListener('click', () => this.close());
+        this.modal.querySelector('#modal-reset-gens')?.addEventListener('click', () => {
+            chargerLaListe();
+            this.close();
+        });
+    }
+
+    public async open(): Promise<void> {
+        super.open();
+        if (!this.gensCharge) {
+            await this.chargerEtAfficherGens();
+        }
+    }
+
+    private async chargerEtAfficherGens(): Promise<void> {
+        const container = document.getElementById('gens-container');
+        if (!container) return;
+
+        try {
+            const gens = await chercherGenerations();
+            container.innerHTML = '';
+
+            gens.forEach((gen: any, index: number) => {
+                const btn = document.createElement('button');
+                btn.className = `gen-btn gen-${index + 1}`;
+                // On transforme "generation-i" en "Génération 1"
+                const genNumber = index + 1;
+                btn.textContent = `Gén. ${genNumber}`;
+                
+                btn.addEventListener('click', async () => {
+                    container.innerHTML = '<p>Filtrage en cours...</p>';
+                    const pokemons = await chercherPokemonParGeneration(gen.url);
+                    // On trie par ID pour avoir un ordre logique
+                    const sortedPokemons = pokemons.sort((a: any, b: any) => {
+                        const idA = parseInt(a.url.split('/').filter(Boolean).pop());
+                        const idB = parseInt(b.url.split('/').filter(Boolean).pop());
+                        return idA - idB;
+                    });
+                    await chargerLaListeDepuisDonnees(sortedPokemons.slice(0, 10));
+                    this.close();
+                    this.chargerEtAfficherGens();
+                });
+                container.appendChild(btn);
+            });
+            this.gensCharge = true;
+        } catch (error) {
+            container.innerHTML = '<p>Erreur de chargement.</p>';
+        }
+    }
+}
+
 export function initialiserBoutonsAction(): void {
     const typeModal = new TypeModal();
     const searchModal = new SearchModal();
+    const genModal = new GenerationModal();
 
     // Bouton Y - Filtrage par Type
     const btnY = document.querySelector('.btn-y');
@@ -220,4 +302,8 @@ export function initialiserBoutonsAction(): void {
     // Bouton B - Recherche par ID
     const btnB = document.querySelector('.btn-b');
     btnB?.addEventListener('click', () => searchModal.open());
+
+    // Bouton A - Filtrage par Génération
+    const btnA = document.querySelector('.btn-a');
+    btnA?.addEventListener('click', () => genModal.open());
 }
