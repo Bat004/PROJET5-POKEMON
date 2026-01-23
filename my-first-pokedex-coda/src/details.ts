@@ -2,6 +2,7 @@ import { chercherDetails } from './api.ts';
 
 export async function afficherLaFiche(url: string, cri: string) {
     const details = await chercherDetails(url);
+    console.log("species url =", details?.species?.url);
     const ecran = document.querySelector('#pokemon-list') as HTMLElement;
 
     if (ecran) {
@@ -10,6 +11,7 @@ export async function afficherLaFiche(url: string, cri: string) {
 
         const imageArt = details.sprites.front_default;
         const type = details.types.map((t: any) => t.type.name).join(' / ');
+
         ecran.innerHTML = `
             <pokemon-details
                 name="${details.name}" 
