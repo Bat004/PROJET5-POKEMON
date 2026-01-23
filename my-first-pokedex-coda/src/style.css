@@ -926,3 +926,38 @@ body.pixel-art-bg {
 .gen-7 { background-color: #9b59b6; }
 .gen-8 { background-color: #34495e; }
 .gen-9 { background-color: #7f8c8d; }
+
+/* ==================== STYLES POUR FILTRES CUMULABLES ==================== */
+
+/* Changement de couleur de bordure quand un filtre est actif */
+.modal-content.filters-active {
+    border-color: var(--pkm-yellow); /* On change pour le jaune Pokémon par exemple */
+    box-shadow: 
+        0 20px 60px rgba(255, 203, 5, 0.3),
+        inset 0 4px 0 rgba(255, 255, 255, 0.2);
+}
+
+.modal-content.filters-active .modal-header {
+    background-color: var(--pkm-yellow);
+    border-bottom-color: var(--pkm-border);
+}
+
+.modal-content.filters-active .modal-header h2 {
+    color: var(--pkm-border);
+    text-shadow: none;
+}
+
+/* Info sur les filtres actifs dans la modale */
+.active-filters-info {
+    background: rgba(0, 0, 0, 0.05);
+    border-left: 4px solid var(--pkm-red);
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 8px;
+    color: var(--pkm-border);
+    text-transform: uppercase;
+}
+
+.modal-content.filters-active .active-filters-info {
+    border-left-color: var(--pkm-yellow);
+}
