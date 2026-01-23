@@ -14,8 +14,10 @@ export class PokemonDetails extends HTMLElement {
         const id = this.getAttribute('id-pkm') || '';
         const type = this.getAttribute('type') || '';
         const statsStr = this.getAttribute('stats') || '[]';
+        const bio = this.getAttribute('bio') || '';
+
         let stats = [];
-        
+
         try {
             stats = JSON.parse(statsStr);
         } catch (e) {
@@ -43,6 +45,7 @@ export class PokemonDetails extends HTMLElement {
                     </div>
                 </div>
             </div>
+            <p class="bio-bubble">"${bio}"</p>
             `;
         }
     }

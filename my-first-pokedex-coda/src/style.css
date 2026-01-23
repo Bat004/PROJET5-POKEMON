@@ -961,37 +961,3 @@ body.pixel-art-bg {
 .modal-content.filters-active .active-filters-info {
     border-left-color: var(--pkm-yellow);
 }
-/* Styles pour les boutons sélectionnés dans les filtres */
-.type-btn.selected, .gen-btn.selected {
-    border-color: white;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05);
-    position: relative;
-}
-
-.type-btn.selected::after, .gen-btn.selected::after {
-    content: '✓';
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background: var(--pkm-yellow);
-    color: var(--pkm-border);
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    border: 2px solid var(--pkm-border);
-    box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-    z-index: 2;
-}
-
-.modal-action-btn.primary {
-    background-color: #2ecc71;
-}
-
-.modal-action-btn.primary:hover {
-    background-color: #27ae60;
-}
