@@ -9,13 +9,14 @@ export async function afficherLaFiche(url: string, cri: string) {
         ecran.style.display = 'block';
 
         const imageArt = details.sprites.front_default;
-
+        const type = details.types.map((t: any) => t.type.name).join(' / ');
         ecran.innerHTML = `
             <pokemon-details
                 name="${details.name}" 
                 image="${imageArt}"
-                id-pkm="${details.id}"
+                id-pkm="${details.id}"  
                 cri="${cri}"
+                type="${type}"
                 stats='${JSON.stringify(details.stats)}'>
             </pokemon-details>
         `;

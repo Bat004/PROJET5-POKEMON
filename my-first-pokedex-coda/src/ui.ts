@@ -2,9 +2,7 @@ import './components/PokemonCard.ts'
 import './components/PokemonDetails.ts'
 import './details.ts'
 
-export function genererSquelette() {
-    console.log("Pokédex prêt");
-}
+export function genererSquelette() {}
 
 export function mettreAJourPagination() {}
 
@@ -14,7 +12,7 @@ export function creerCarte(nom: string, image: string, url: string, cri: string)
         name="${nom}" 
         image="${image}" 
         url="${url}" 
-        cri="${cri}">
+        cri="${cri}"
       </pokemon-card>
     `;
 }

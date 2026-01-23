@@ -12,5 +12,4 @@ chargerLaListe();
 
 initialiserBoutonsAction();
 
-// VHS: filtre global parmi tous les Pokémon
 initialiserRechercheVhsFiltreGlobal();
