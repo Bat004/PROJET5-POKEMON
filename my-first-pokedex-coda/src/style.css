@@ -961,3 +961,75 @@ body.pixel-art-bg {
 .modal-content.filters-active .active-filters-info {
     border-left-color: var(--pkm-yellow);
 }
+
+/* ==================== BULLE BIO ==================== */
+.bio-bubble {
+    position: relative;
+    margin: 25px;
+    background: var(--pkm-screen-inner);
+    border: 4px solid var(--pkm-border);
+    border-radius: 14px;
+    padding: 12px 24px;
+    max-width: 6000px;
+    font-size: 10px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: var(--pkm-border);
+    box-shadow:
+            0 6px 0 rgba(0,0,0,0.2),
+            inset 0 2px 0 rgba(255,255,255,0.2);
+
+    animation: bubbleFadeIn 0.3s ease forwards;
+    opacity: 0;
+}
+
+/* Triangle pointant vers le Pokémon */
+.bio-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -10px; /* sous la bulle */
+    left: 30px;    /* horizontalement vers le Pokémon */
+    border-width: 10px 10px 0 10px;
+    border-style: solid;
+    border-color: var(--pkm-screen-inner) transparent transparent transparent;
+    display: block;
+}
+
+/* Bordure triangle */
+.bio-bubble::before {
+    content: "";
+    position: absolute;
+    bottom: -14px;
+    left: 26px;
+    border-width: 14px 14px 0 14px;
+    border-style: solid;
+    border-color: var(--pkm-border) transparent transparent transparent;
+}
+
+/* Animation entrée */
+@keyframes bubbleFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== VARIANTE POUR DROITE/GAUCHE ==================== */
+.bio-bubble.right {
+    left: auto;
+    right: 0;
+}
+
+.bio-bubble.right::after {
+    left: auto;
+    right: 30px;
+}
+
+.bio-bubble.right::before {
+    left: auto;
+    right: 26px;
+}
