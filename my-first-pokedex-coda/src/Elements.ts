@@ -1,46 +1,108 @@
 /**
  * Elements.ts
- * Gestion des filtres cumulables sans accents et avec types traduits
+ * Logique mixte : Types (INTERSECTION ET), Générations (UNION OU)
+ * Pagination de 10 pokémons par page
  */
 import { chercherTypes, chercherPokemonParType, chercherDetails, chercherGenerations, chercherPokemonParGeneration } from './api.ts';
 import { chargerLaListeDepuisDonnees, chargerLaListe } from './listepkm.ts';
+import { obtenirPageActuelle } from './pagination.ts';
 
 /**
  * Gestionnaire d'etat global pour les filtres
  */
 class FilterManager {
-    public currentType: { name: string, url: string } | null = null;
-    public currentGen: { name: string, url: string } | null = null;
+    public selectedTypes: { name: string, url: string }[] = [];
+    public selectedGens: { name: string, url: string }[] = [];
+    private filteredResults: any[] = [];
+    private isFiltering: boolean = false;
 
     public async applyFilters() {
-        let results: any[] = [];
+        let typeResults: any[] | null = null;
+        let genResults: any[] | null = null;
 
-        if (this.currentType && this.currentGen) {
-            const typePokes = await chercherPokemonParType(this.currentType.url);
-            const genPokes = await chercherPokemonParGeneration(this.currentGen.url);
-            const genNames = new Set(genPokes.map((p: any) => p.name));
-            results = typePokes.filter((p: any) => genNames.has(p.name));
+        // 1. Filtrage par Types (Intersection : Type A ET Type B)
+        if (this.selectedTypes.length > 0) {
+            const allTypePokesLists = await Promise.all(
+                this.selectedTypes.map(t => chercherPokemonParType(t.url))
+            );
+            
+            let intersection = allTypePokesLists[0];
+            for (let i = 1; i < allTypePokesLists.length; i++) {
+                const currentListNames = new Set(allTypePokesLists[i].map((p: any) => p.name));
+                intersection = intersection.filter((p: any) => currentListNames.has(p.name));
+            }
+            typeResults = intersection;
+        }
+
+        // 2. Filtrage par Générations (Union : Gen A OU Gen B)
+        if (this.selectedGens.length > 0) {
+            const allGenPokesLists = await Promise.all(
+                this.selectedGens.map(g => chercherPokemonParGeneration(g.url))
+            );
+            
+            const seen = new Set();
+            genResults = [];
+            for (const list of allGenPokesLists) {
+                for (const p of list) {
+                    if (!seen.has(p.name)) {
+                        seen.add(p.name);
+                        genResults.push(p);
+                    }
+                }
+            }
+        }
+
+        // 3. Combinaison finale (Intersection entre Types et Générations)
+        let finalResults: any[] = [];
+
+        if (typeResults !== null && genResults !== null) {
+            const genNames = new Set(genResults.map((p: any) => p.name));
+            finalResults = typeResults.filter((p: any) => genNames.has(p.name));
+            this.isFiltering = true;
         } 
-        else if (this.currentType) {
-            results = await chercherPokemonParType(this.currentType.url);
+        else if (typeResults !== null) {
+            finalResults = typeResults;
+            this.isFiltering = true;
         } 
-        else if (this.currentGen) {
-            results = await chercherPokemonParGeneration(this.currentGen.url);
+        else if (genResults !== null) {
+            finalResults = genResults;
+            this.isFiltering = true;
         } 
         else {
+            this.isFiltering = false;
+            this.filteredResults = [];
             await chargerLaListe();
             this.updateModalsBorder(false);
             return;
         }
 
-        results.sort((a: any, b: any) => {
+        this.filteredResults = finalResults;
+        this.filteredResults.sort((a: any, b: any) => {
             const idA = parseInt(a.url.split('/').filter(Boolean).pop());
             const idB = parseInt(b.url.split('/').filter(Boolean).pop());
             return idA - idB;
         });
 
-        await chargerLaListeDepuisDonnees(results.slice(0, 10));
+        await this.renderCurrentPage();
         this.updateModalsBorder(true);
+    }
+
+    public async renderCurrentPage() {
+        if (!this.isFiltering) {
+            await chargerLaListe();
+            return;
+        }
+
+        const page = obtenirPageActuelle();
+        const start = page * 10;
+        const end = start + 10;
+        const pageData = this.filteredResults.slice(start, end);
+        
+        await chargerLaListeDepuisDonnees(pageData, page);
+    }
+
+    public getIsFiltering(): boolean {
+        return this.isFiltering;
     }
 
     private updateModalsBorder(hasFilters: boolean) {
@@ -55,13 +117,41 @@ class FilterManager {
     }
 
     public reset() {
-        this.currentType = null;
-        this.currentGen = null;
+        this.selectedTypes = [];
+        this.selectedGens = [];
+        this.isFiltering = false;
+        this.filteredResults = [];
         this.applyFilters();
+    }
+
+    public toggleType(type: { name: string, url: string }) {
+        const index = this.selectedTypes.findIndex(t => t.name === type.name);
+        if (index === -1) {
+            this.selectedTypes.push(type);
+        } else {
+            this.selectedTypes.splice(index, 1);
+        }
+    }
+
+    public toggleGen(gen: { name: string, url: string }) {
+        const index = this.selectedGens.findIndex(g => g.url === gen.url);
+        if (index === -1) {
+            this.selectedGens.push(gen);
+        } else {
+            this.selectedGens.splice(index, 1);
+        }
+    }
+
+    public isTypeSelected(typeName: string): boolean {
+        return this.selectedTypes.some(t => t.name === typeName);
+    }
+
+    public isGenSelected(genUrl: string): boolean {
+        return this.selectedGens.some(g => g.url === genUrl);
     }
 }
 
-const filterState = new FilterManager();
+export const filterState = new FilterManager();
 
 // Dictionnaire de traduction des types
 const traductionsTypes: { [key: string]: string } = {
@@ -138,7 +228,7 @@ class TypeModal extends BaseModal {
         if (!this.modal) return;
         this.modal.innerHTML = `
             <div class="modal-header">
-                <h2>Filtrer par Type</h2>
+                <h2>Filtrer par Type (Intersection ET)</h2>
                 <button class="modal-close-btn">✕</button>
             </div>
             <div class="modal-body">
@@ -148,32 +238,60 @@ class TypeModal extends BaseModal {
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="modal-action-btn secondary" id="modal-reset-types">Reinitialiser Tout</button>
+                <button class="modal-action-btn secondary" id="modal-reset-types">Reinitialiser</button>
+                <button class="modal-action-btn primary" id="modal-apply-types">Appliquer</button>
                 <button class="modal-action-btn" id="modal-close-types">Fermer</button>
             </div>
         `;
 
         this.modal.querySelector('.modal-close-btn')?.addEventListener('click', () => this.close());
         this.modal.querySelector('#modal-close-types')?.addEventListener('click', () => this.close());
-        this.modal.querySelector('#modal-reset-types')?.addEventListener('click', () => {
-            filterState.reset();
-            this.updateActiveInfo();
+        this.modal.querySelector('#modal-apply-types')?.addEventListener('click', async () => {
+            await filterState.applyFilters();
             this.close();
+        });
+        this.modal.querySelector('#modal-reset-types')?.addEventListener('click', async () => {
+            filterState.selectedTypes = [];
+            this.updateActiveInfo();
+            this.refreshButtons();
+            await filterState.applyFilters();
         });
     }
 
     private updateActiveInfo() {
         const info = this.modal?.querySelector('#active-filters-type');
         if (info) {
-            const typeName = filterState.currentType ? (traductionsTypes[filterState.currentType.name] || filterState.currentType.name) : "Aucun";
-            info.textContent = `Type actif : ${typeName}`;
+            if (filterState.selectedTypes.length === 0) {
+                info.textContent = "Aucun type sélectionné";
+            } else {
+                const names = filterState.selectedTypes.map(t => traductionsTypes[t.name] || t.name).join(' + ');
+                info.textContent = `Types requis : ${names}`;
+            }
         }
+    }
+
+    private refreshButtons() {
+        const container = this.modal?.querySelector('#types-container');
+        if (!container) return;
+        const buttons = container.querySelectorAll('.type-btn');
+        buttons.forEach((btn: any) => {
+            const typeName = btn.getAttribute('data-type');
+            if (filterState.isTypeSelected(typeName)) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
     }
 
     public async open(): Promise<void> {
         super.open();
-        this.updateActiveInfo();
-        if (!this.typesCharge) await this.chargerEtAfficherTypes();
+        if (!this.typesCharge) {
+            await this.chargerEtAfficherTypes();
+        } else {
+            this.updateActiveInfo();
+            this.refreshButtons();
+        }
     }
 
     private async chargerEtAfficherTypes(): Promise<void> {
@@ -187,15 +305,20 @@ class TypeModal extends BaseModal {
                 if (type.name === 'unknown' || type.name === 'shadow') return;
                 const btn = document.createElement('button');
                 btn.className = `type-btn type-${type.name}`;
+                btn.setAttribute('data-type', type.name);
                 btn.textContent = traductionsTypes[type.name] || type.name;
-                btn.addEventListener('click', async () => {
-                    filterState.currentType = { name: type.name, url: type.url };
-                    await filterState.applyFilters();
-                    this.close();
+                
+                if (filterState.isTypeSelected(type.name)) btn.classList.add('selected');
+
+                btn.addEventListener('click', () => {
+                    filterState.toggleType({ name: type.name, url: type.url });
+                    btn.classList.toggle('selected');
+                    this.updateActiveInfo();
                 });
                 container.appendChild(btn);
             });
             this.typesCharge = true;
+            this.updateActiveInfo();
         } catch (error) { container.innerHTML = '<p>Erreur.</p>'; }
     }
 }
@@ -215,7 +338,7 @@ class GenerationModal extends BaseModal {
         if (!this.modal) return;
         this.modal.innerHTML = `
             <div class="modal-header">
-                <h2>Filtrer par Generation</h2>
+                <h2>Filtrer par Generation (Union OU)</h2>
                 <button class="modal-close-btn">✕</button>
             </div>
             <div class="modal-body">
@@ -225,31 +348,60 @@ class GenerationModal extends BaseModal {
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="modal-action-btn secondary" id="modal-reset-gens">Reinitialiser Tout</button>
+                <button class="modal-action-btn secondary" id="modal-reset-gens">Reinitialiser</button>
+                <button class="modal-action-btn primary" id="modal-apply-gens">Appliquer</button>
                 <button class="modal-action-btn" id="modal-close-gens">Fermer</button>
             </div>
         `;
 
         this.modal.querySelector('.modal-close-btn')?.addEventListener('click', () => this.close());
         this.modal.querySelector('#modal-close-gens')?.addEventListener('click', () => this.close());
-        this.modal.querySelector('#modal-reset-gens')?.addEventListener('click', () => {
-            filterState.reset();
-            this.updateActiveInfo();
+        this.modal.querySelector('#modal-apply-gens')?.addEventListener('click', async () => {
+            await filterState.applyFilters();
             this.close();
+        });
+        this.modal.querySelector('#modal-reset-gens')?.addEventListener('click', async () => {
+            filterState.selectedGens = [];
+            this.updateActiveInfo();
+            this.refreshButtons();
+            await filterState.applyFilters();
         });
     }
 
     private updateActiveInfo() {
         const info = this.modal?.querySelector('#active-filters-gen');
         if (info) {
-            info.textContent = filterState.currentGen ? `Generation active : ${filterState.currentGen.name}` : "Aucune";
+            if (filterState.selectedGens.length === 0) {
+                info.textContent = "Aucune génération sélectionnée";
+            } else {
+                const names = filterState.selectedGens.map(g => g.name).join(', ');
+                info.textContent = `Générations actives : ${names}`;
+            }
         }
+    }
+
+    private refreshButtons() {
+        const container = this.modal?.querySelector('#gens-container');
+        if (!container) return;
+        const buttons = container.querySelectorAll('.gen-btn');
+        buttons.forEach((btn: any) => {
+            const genUrl = btn.getAttribute('data-url');
+            if (filterState.isGenSelected(genUrl)) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
     }
 
     public async open(): Promise<void> {
         super.open();
-        this.updateActiveInfo();
-        if (!this.gensCharge) await this.chargerEtAfficherGens();
+        if (!this.gensCharge) {
+            await this.chargerEtAfficherGens();
+        } else {
+            this.updateActiveInfo();
+            this.refreshButtons();
+        }
     }
 
     private async chargerEtAfficherGens(): Promise<void> {
@@ -262,15 +414,20 @@ class GenerationModal extends BaseModal {
             gens.forEach((gen: any, index: number) => {
                 const btn = document.createElement('button');
                 btn.className = `gen-btn gen-${index + 1}`;
+                btn.setAttribute('data-url', gen.url);
                 btn.textContent = `Gen. ${index + 1}`;
-                btn.addEventListener('click', async () => {
-                    filterState.currentGen = { name: `Generation ${index + 1}`, url: gen.url };
-                    await filterState.applyFilters();
-                    this.close();
+                
+                if (filterState.isGenSelected(gen.url)) btn.classList.add('selected');
+
+                btn.addEventListener('click', () => {
+                    filterState.toggleGen({ name: `Gen. ${index + 1}`, url: gen.url });
+                    btn.classList.toggle('selected');
+                    this.updateActiveInfo();
                 });
                 container.appendChild(btn);
             });
             this.gensCharge = true;
+            this.updateActiveInfo();
         } catch (error) { container.innerHTML = '<p>Erreur.</p>'; }
     }
 }
