@@ -40,6 +40,8 @@ body.pixel-art-bg {
     padding: 20px;
     border-radius: 60px 20px 20px 60px;
     box-shadow: 20px 20px 0 rgba(0,0,0,0.1), inset -10px -10px 0 var(--pkm-red-dark), inset 10px 10px 0 var(--pkm-red-light);
+    position: relative;
+    overflow: visible; /* Important pour voir la cassette dépasser */
 }
 
 .pixel-controls-sidebar {
@@ -1033,4 +1035,250 @@ body.pixel-art-bg {
 .bio-bubble.right::before {
     left: auto;
     right: 26px;
+}
+
+/* ==================== AJOUTS PERSONNALISÉS : VALIDATION ET BOUTONS ==================== */
+
+/* Icône de validation sur les boutons sélectionnés (Type et Génération) */
+.type-btn.selected, .gen-btn.selected {
+    position: relative;
+    padding-right: 30px; /* Espace pour l'icône */
+    border-color: #2ecc71; /* Bordure verte pour souligner la sélection */
+}
+
+.type-btn.selected::after, .gen-btn.selected::after {
+    content: '✓';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+    font-size: 14px;
+    color: #2ecc71;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+}
+
+/* Changement de couleur du bouton "Appliquer" (Valider) en vert */
+.modal-action-btn.primary, #modal-apply-types, #modal-apply-gens {
+    background-color: #2ecc71;
+    box-shadow: 0 5px 0 #27ae60;
+}
+
+.modal-action-btn.primary:hover, #modal-apply-types:hover, #modal-apply-gens:hover {
+    background-color: #27ae60;
+    box-shadow: 0 7px 0 #1e8449;
+}
+
+.modal-action-btn.primary:active, #modal-apply-types:active, #modal-apply-gens:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #1e8449;
+}
+
+/* ==================== STYLES DE LA CASSETTE (CARTRIDGE) ==================== */
+
+.pokedex-console {
+    position: relative; /* Pour positionner le slot de la cassette */
+}
+
+.cartridge-slot {
+    position: absolute;
+    top: -35px; /* Un peu plus haut pour être bien visible */
+    right: 40px;
+    width: 120px;
+    height: 50px;
+    background: var(--pkm-red-dark);
+    border: 6px solid var(--pkm-border);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    z-index: 100; /* Augmenté pour passer devant tout */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    box-shadow: inset 0 5px 10px rgba(0,0,0,0.3);
+}
+
+.cartridge {
+    width: 100px;
+    height: 80px;
+    background: #95a5a6; /* Gris GameBoy */
+    border: 4px solid var(--pkm-border);
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    box-shadow: 4px 0 0 rgba(0,0,0,0.2);
+    transform: translateY(-40px); /* Sorti davantage pour être cliquable */
+    z-index: 101;
+}
+
+.cartridge:hover {
+    transform: translateY(-40px);
+}
+
+.cartridge-label {
+    width: 80%;
+    height: 50%;
+    background: white;
+    border: 2px solid var(--pkm-border);
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6px;
+    text-align: center;
+    color: var(--pkm-border);
+    font-weight: bold;
+    overflow: hidden;
+}
+
+.cartridge-grip {
+    width: 70%;
+    height: 15%;
+    margin-top: 8px;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 2px,
+        var(--pkm-border) 2px,
+        var(--pkm-border) 4px
+    );
+    opacity: 0.3;
+}
+
+/* Variantes de couleurs pour les cassettes */
+.cartridge.v-red { background-color: #e74c3c; }
+.cartridge.v-red .cartridge-label { background-color: #ff7675; color: white; }
+
+.cartridge.v-blue { background-color: #3498db; }
+.cartridge.v-blue .cartridge-label { background-color: #74b9ff; color: white; }
+
+/* Grille de sélection dans la modale */
+.cartridge-selection-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 40px 20px;
+    justify-items: center;
+}
+
+.cartridge-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+}
+
+.cartridge-option .cartridge {
+    transform: translateY(0); 
+    width: 120px;
+    height: 100px;
+}
+
+.cartridge-option:hover .cartridge {
+    transform: scale(1.1);
+}
+
+.cartridge-option p {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--pkm-border);
+}
+
+/* --- POWER CONTROLS & ANIMATIONS --- */
+.power-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.power-btn {
+    width: 45px;
+    height: 45px;
+    background: #2f3542;
+    border: 4px solid #1e2124;
+    border-radius: 50%;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.4);
+    transition: all 0.1s;
+    z-index: 100;
+}
+
+.power-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+}
+
+.power-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.led-rect {
+    width: 20px;
+    height: 10px;
+    background: #1e2124;
+    border: 2px solid #000;
+    border-radius: 2px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.led-rect.active {
+    background: #2ecc71;
+    box-shadow: 0 0 8px #2ecc71;
+}
+
+/* Animations d'écran */
+.pixel-screen-display, .vhs-mini-screen {
+    position: relative;
+    overflow: hidden;
+}
+
+/* On utilise un pseudo-élément pour l'effet d'extinction sans toucher à la taille de l'écran */
+.pixel-screen-display::after, .vhs-mini-screen::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: black;
+    transform: scaleY(0);
+    transition: transform 0.4s ease-in-out;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.pixel-screen-display.off::after, .vhs-mini-screen.off::after {
+    transform: scaleY(1);
+    pointer-events: all;
+}
+
+/* Animation de flash lors de l'extinction/allumage */
+.pixel-screen-display.power-anim, .vhs-mini-screen.power-anim {
+    animation: screenFlash 0.4s ease-in-out;
+}
+
+@keyframes screenFlash {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(3); background: white; }
+    100% { filter: brightness(1); }
+}
+
+/* Pour éviter que le petit écran ne change de taille dans le layout */
+.vhs-mini-screen {
+    min-width: 160px;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+.pixel-screen-display.off *, .vhs-mini-screen.off * {
+    visibility: hidden;
 }
