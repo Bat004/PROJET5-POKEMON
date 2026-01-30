@@ -1,4 +1,3 @@
-
 import { chercherTousLesNoms, chercherDetails } from './api';
 
 // Gestion de l'état de l'équipe
