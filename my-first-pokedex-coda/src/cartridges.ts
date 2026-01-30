@@ -150,7 +150,7 @@ export function initialiserCartridges() {
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, 1fr);
             gap: 8px;
-            flex-grow: 0;
+            flex-grow: 1;
         }
 
         .team-slot {
@@ -170,139 +170,17 @@ export function initialiserCartridges() {
             transform: translateY(-1px);
         }
 
-        .team-slot.selected {
-            background: var(--pkm-yellow);
-            border-color: var(--pkm-red);
-            border-width: 4px;
-        }
-
         .team-slot:not(.filled) {
             justify-content: center;
             align-items: center;
             border-style: dashed;
         }
 
-        .team-slot:not(.filled) {
-            background: rgba(255,255,255,0.5);
-            border-style: solid;
-        }
-
-        /* ANIMATIONS POKEBALL 3D */
-        @keyframes pokeball-open {
-            0% { transform: rotateX(0deg); }
-            100% { transform: rotateX(-60deg); }
-        }
-
-        @keyframes pokeball-wobble {
-            0%, 100% { transform: translateX(0) rotateZ(0deg); }
-            25% { transform: translateX(-8px) rotateZ(-10deg); }
-            75% { transform: translateX(8px) rotateZ(10deg); }
-        }
-
-        @keyframes center-pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
-            50% { box-shadow: 0 0 0 8px rgba(255, 0, 0, 0); }
-        }
-
-        /* DESIGN 3D DE LA POKÉBALL */
-        .pokeball-icon {
-            width: 50px;
-            height: 50px;
-            position: relative;
-            perspective: 600px;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .pokeball-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.4s ease;
-        }
-
-        .pokeball-top, .pokeball-bottom {
-            position: absolute;
-            width: 100%;
-            height: 50%;
-            left: 0;
-            border: 3px solid var(--pkm-border);
-            transition: transform 0.4s ease;
-        }
-
-        .pokeball-top {
-            top: 0;
-            background: linear-gradient(135deg, #ff6b6b 0%, #cc0000 50%, #990000 100%);
-            border-radius: 25px 25px 0 0;
-            border-bottom: 1.5px solid var(--pkm-border);
-            transform-origin: bottom;
-            box-shadow: inset 2px 2px 5px rgba(255,255,255,0.4);
-        }
-
-        .pokeball-bottom {
-            bottom: 0;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #e0e0e0 100%);
-            border-radius: 0 0 25px 25px;
-            border-top: 1.5px solid var(--pkm-border);
-            box-shadow: inset -2px -2px 5px rgba(0,0,0,0.1);
-        }
-
-        .pokeball-center {
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateZ(5px);
-            background: white;
-            border: 3px solid var(--pkm-border);
-            border-radius: 50%;
-            z-index: 20;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        /* État vide : Pokéball grise */
-        .team-slot:not(.filled) .pokeball-top {
-            background: linear-gradient(135deg, #b0b0b0 0%, #808080 50%, #606060 100%);
-        }
-
-        /* État occupé : Bouton rouge brillant */
-        .team-slot.filled .pokeball-center {
-            background: #ff0000;
-            animation: center-pulse 1.5s infinite;
-        }
-
-        /* Animation d'ouverture au survol (slot vide) */
-        .team-slot:not(.filled):hover .pokeball-top {
-            transform: rotateX(-70deg);
-        }
-
-        /* Animation de tremblement au survol (slot occupé) */
-        .team-slot.filled:hover .pokeball-container {
-            animation: pokeball-wobble 0.4s infinite;
-        }
-
-        /* Signe distinctif : Halo lumineux quand plein */
-        .team-slot.filled::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            height: 90%;
-            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, transparent 70%);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Ajustement pour la Pokéball quand le slot est plein */
-        .team-slot.filled .pokeball-icon {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            transform: scale(0.7);
+        .team-slot:not(.filled)::after {
+            content: "+";
+            font-size: 20px;
+            color: var(--pkm-border);
+            opacity: 0.5;
         }
 
         .slot-left {
@@ -331,108 +209,8 @@ export function initialiserCartridges() {
             text-overflow: ellipsis;
         }
 
-        /* CADRE DE DÉTAILS DU POKÉMON SÉLECTIONNÉ */
-        .pokemon-detail-frame {
-            background: white;
-            border: 4px solid var(--pkm-border);
-            margin-top: 10px;
-            padding: 10px;
+        .slot-right {
             display: none;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
-        }
-
-        .pokemon-detail-frame.active {
-            display: flex;
-            gap: 10px;
-        }
-
-        .detail-left {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 120px;
-        }
-
-        .detail-left img {
-            width: 100px;
-            height: 100px;
-            image-rendering: pixelated;
-            object-fit: contain;
-        }
-
-        .detail-separator {
-            width: 80%;
-            height: 2px;
-            background: var(--pkm-border);
-            margin: 4px 0;
-        }
-
-        .detail-name {
-            font-size: 10px;
-            text-transform: uppercase;
-            text-align: center;
-            margin-top: 4px;
-        }
-
-        .detail-right {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .detail-stats {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .detail-stat-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .detail-stat-label {
-            font-size: 7px;
-            text-transform: uppercase;
-            min-width: 40px;
-            font-weight: bold;
-        }
-
-        .detail-stat-bar-container {
-            flex-grow: 1;
-            height: 8px;
-            background: #dfe4ea;
-            border: 2px solid var(--pkm-border);
-            position: relative;
-        }
-
-        .detail-stat-bar-fill {
-            height: 100%;
-            transition: width 0.3s;
-        }
-
-        .detail-stat-value {
-            font-size: 6px;
-            min-width: 25px;
-            text-align: right;
-        }
-
-        .detail-types {
-            display: flex;
-            gap: 6px;
-            margin-top: 4px;
-        }
-
-        .detail-type-badge {
-            padding: 4px 8px;
-            border: 2px solid var(--pkm-border);
-            border-radius: 4px;
-            font-size: 7px;
-            text-transform: uppercase;
-            font-weight: bold;
-            color: white;
         }
 
         .stat-row {
@@ -614,26 +392,17 @@ export function initialiserCartridges() {
                 <div class="team-grid">
                     ${team.map((pkm: any, index: number) => `
                         <div class="team-slot ${pkm ? 'filled' : ''}" data-index="${index}">
-                            <div class="pokeball-icon">
-                                <div class="pokeball-container">
-                                    <div class="pokeball-top"></div>
-                                    <div class="pokeball-bottom"></div>
-                                    <div class="pokeball-center"></div>
-                                </div>
-                            </div>
                             ${pkm ? `
                                 <div class="remove-btn" data-index="${index}">X</div>
-                                <div class="slot-left" style="position: relative; z-index: 1;">
+                                <div class="slot-left">
                                     <img src="${pkm.image}" alt="${pkm.name}">
                                     <p>${pkm.name}</p>
                                 </div>
+
                             ` : ''}
                         </div>
                     `).join('')}
                 </div>
-                
-                <!-- CADRE DE DÉTAILS -->
-                <div class="pokemon-detail-frame" id="pokemon-detail-frame"></div>
                 
                 <!-- POPUP DE SÉLECTION -->
                 <div id="selection-popup">
@@ -693,8 +462,7 @@ export function initialiserCartridges() {
                                 team[currentSlotIndex] = {
                                     name: p.name,
                                     image: details.sprites.front_default,
-                                    stats: details.stats,
-                                    types: details.types
+                                    stats: details.stats
                                 };
                                 saveTeam(team);
                                 popup?.classList.remove('active');
@@ -707,80 +475,13 @@ export function initialiserCartridges() {
             }, 500);
         });
 
-        const detailFrame = document.getElementById('pokemon-detail-frame');
-        
-        const showPokemonDetails = (pkm: any) => {
-            if (!pkm || !detailFrame) return;
-            
-            // Couleurs pour les types
-            const typeColors: {[key: string]: string} = {
-                normal: '#A8A878', fire: '#F08030', water: '#6890F0',
-                electric: '#F8D030', grass: '#78C850', ice: '#98D8D8',
-                fighting: '#C03028', poison: '#A040A0', ground: '#E0C068',
-                flying: '#A890F0', psychic: '#F85888', bug: '#A8B820',
-                rock: '#B8A038', ghost: '#705898', dragon: '#7038F8',
-                dark: '#705848', steel: '#B8B8D0', fairy: '#EE99AC'
-            };
-            
-            const statsHtml = pkm.stats.map((stat: any) => {
-                const maxStat = 255;
-                const percentage = (stat.base_stat / maxStat) * 100;
-                const statName = stat.stat.name.toUpperCase();
-                return `
-                    <div class="detail-stat-row">
-                        <div class="detail-stat-label">${statName}</div>
-                        <div class="detail-stat-bar-container">
-                            <div class="detail-stat-bar-fill" style="width: ${percentage}%; background: #2ecc71;"></div>
-                        </div>
-                        <div class="detail-stat-value">${stat.base_stat}</div>
-                    </div>
-                `;
-            }).join('');
-            
-            const typesHtml = pkm.types.map((t: any) => {
-                const typeName = t.type.name;
-                const color = typeColors[typeName] || '#777';
-                return `<div class="detail-type-badge" style="background: ${color};">${typeName}</div>`;
-            }).join('');
-            
-            detailFrame.innerHTML = `
-                <div class="detail-left">
-                    <img src="${pkm.image}" alt="${pkm.name}">
-                    <div class="detail-separator"></div>
-                    <div class="detail-name">${pkm.name}</div>
-                </div>
-                <div class="detail-right">
-                    <div class="detail-stats">
-                        ${statsHtml}
-                    </div>
-                    <div class="detail-types">
-                        ${typesHtml}
-                    </div>
-                </div>
-            `;
-            
-            detailFrame.classList.add('active');
-        };
-        
         document.querySelectorAll('.team-slot').forEach(slot => {
             slot.addEventListener('click', (e) => {
                 if ((e.target as HTMLElement).classList.contains('remove-btn')) return;
                 
-                const index = parseInt(slot.getAttribute('data-index') || '0');
-                const team = getTeam();
-                const pkm = team[index];
-                
-                // Si le slot est vide, ouvrir le popup de sélection
-                if (!pkm) {
-                    currentSlotIndex = index;
-                    popup?.classList.add('active');
-                    popupInput?.focus();
-                } else {
-                    // Si le slot est rempli, afficher les détails
-                    document.querySelectorAll('.team-slot').forEach(s => s.classList.remove('selected'));
-                    slot.classList.add('selected');
-                    showPokemonDetails(pkm);
-                }
+                currentSlotIndex = parseInt(slot.getAttribute('data-index') || '0');
+                popup?.classList.add('active');
+                popupInput?.focus();
             });
         });
 
